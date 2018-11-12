@@ -1,0 +1,83 @@
+step1: install node js dependencies.
+  * npm init
+  * npm install express jsonwebtoken mongoose body-parser --save
+  * npm install nodemon --save-dev
+
+step2: configure the node server
+  * pckg.json --> change the following
+      "scripts": {
+            "start": "nodemon server"
+        },
+
+  * create file server.js
+  * hit the following instruction in the terminal : npm start
+
+step3: send a request to node server via postman
+  * we define one route "/checking" and send the JSON response to the client
+  * Open the Postman and send the get request to http://localhost:3000/checking
+
+step4: configure the MongoDB database
+  * write the code to connect the Node.js application to the MongoDB database.
+  * write the body-parser middleware to the application
+
+step5: create user model
+  * define the schema for the User collection.
+
+step6: create the routes for users
+  * We can not store the plain password. So let us install bcrypt module first.
+    --> npm install bcrypt --save
+  * create user.route.js file.
+
+step7: send a post request from the postman 
+  * localhost:3000/user/signup with body 
+       {
+           "email":"",
+           "password":""
+       }
+       --> it will create a new user successfully
+
+step8: sign in the user
+  * Go to the user.route.js file and define the signin route.
+  * First, I have checked if the user’s email exists or not. 
+    If not then return 401 unauthorized access. If email is 
+    there then check the password with bcrypted database 
+    password if match found then welcome to the JWT auth 
+    else 401 unauthorized access.
+    --> localhost:3000/user/signin with body 
+       {
+           "email":"",
+           "password":""
+       }
+
+step9: return the jwt, if auth attempt is successful.
+  * If the user’s credentials email and password are valid 
+    then in response, we need to return a JWT token.
+    So let us generate the token and return to the user.
+
+The format of JWT Token is as following.
+
+HEADER: ALGORITHM & TOKEN TYPE
+{
+“alg”: “HS256”,
+“typ”: “JWT”
+}
+
+PAYLOAD:DATA
+{
+  "email": "chandra@gmail.com",
+  "_id": "5be942217d031115b07430f0",
+  "iat": 1542014626,
+  "exp": 1542021826
+}
+
+VERIFY SIGNATURE
+HMACSHA256(
+  base64UrlEncode(header) + "." +
+  base64UrlEncode(payload),
+  secret
+)
+
+--> So it is a combination of header, payload, and 
+    secretkey, we are providing. Remember, You need to 
+    define your secret key in your environment variable 
+    file.I have just shown here for the demo purpose
